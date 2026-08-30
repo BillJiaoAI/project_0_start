@@ -1,0 +1,41 @@
+# ===== llama.cpp 上游源码（不入库，从 GitHub 重新下载）=====
+llama/llama.cpp/
+
+# ===== 模型文件（太大）=====
+*.gguf
+llama/models/
+
+# ===== 编译产物 =====
+*.exe
+*.pdb
+*.obj
+*.o
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.ptx
+*.sass
+*.nsys-rep
+*.ncu-rep
+*.sqlite
+*.log
+
+# build 目录
+build/
+cmake-build-*/
+out/
+
+# 临时/输出文件
+*.tmp
+*.bak
+output.txt
+run*.log
+
+# ===== IDE / 系统 =====
+.trae/
+.vscode/
+.vs/
+*.suo
+Thumbs.db
