@@ -1,0 +1,21 @@
+==PROF== Connected to process 30220 (D:\software2_ln\project_0_start\matmul\optimized_v2\matmul_v2.exe)
+==PROF== Profiling "matmul_v2_padding" - 0: 0%....50%....100% - 1 pass
+=== Matmul V2: Bank Conflict Avoidance ===
+Matrix: 1024x1024 x 1024x1024 = 1024x1024
+Block: 16x16, Grid: 64x64
+Tile Size: 16x16 (with padding)
+Time: 210.04 ms
+GFLOPS: 10.22
+Error: 7.440109
+Test PASSED
+==PROF== Disconnected from process 30220
+[30220] matmul_v2.exe@127.0.0.1
+  matmul_v2_padding(const float *, const float *, float *, int, int, int) (64, 64, 1)x(16, 16, 1), Context 1, Stream 7, Device 0, CC 12.0
+    Section: Command line profiler metrics
+    ----------------------------------------------------------------------- ----------- ------------
+    Metric Name                                                             Metric Unit Metric Value
+    ----------------------------------------------------------------------- ----------- ------------
+    sm__shared_mem_conflicts_pipe_lsu_mem_shared_op_global.avg.pct                           (!) n/a
+    sm__shared_mem_transactions_conflicts_pipe_lsu_mem_shared_op_global.avg                  (!) n/a
+    ----------------------------------------------------------------------- ----------- ------------
+
