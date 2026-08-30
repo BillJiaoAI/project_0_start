@@ -111,3 +111,88 @@ demo 编译：v2_simple_inference\build.bat
        + cudart.lib cublas.lib cublasLt.lib cuda.lib + advapi32.lib 等系统库
 注意：需用 /MD（动态 CRT）与 llama.cpp 一致
 
+
+
+
+
+
+
+
+
+GQA:
+```
+输入[2,896]
+    ↓ QKV三个MUL_MAT
+    ↓ reshape+transpose拆多头； 把embedding那维度拆到开头
+    ↓ ROPE旋转Q、K    sin cos,就是pos越大，角度越多，相当于个给个位置编码
+    ↓ K/V写入KV‑Cache
+    ↓ GQA：QKᵀ →scale →mask →softmax →@V
+    ↓ 拼接多头恢复 [2,896]
+    ↓ attn_output.weight矩阵乘法 [2,896]
+    ↓ ADD残差： +最开始输入[2,896]
+输出 [2,896] →送给下一个RMS_NORM(ffn_norm)
+```
+
+
+
+decoder时候 全网sequence length都是1，只有attention计算时候 QKV多了
+
+
+
+KV cache:
+也就是省了矩阵投影，但是QK V还是要算的,而且越来越多的
+
+```
+1. QKV 投影（只算新 token）
+
+```
+Q_new = X_new × Wq   → [1,896]
+K_new = X_new × Wk   → [1,128]
+V_new = X_new × Wv   → [1,128]
+```
+
+2. reshape+transpose 多头
+
+```
+Q：[14,1,64]
+K_new：[2,1,64]
+V_new：[2,1,64]
+```
+
+3. RoPE：只旋转新的 Q_new、K_new，V 不动
+
+> 
+> ✨历史 K/V 不用再算 RoPE！这就是 cache 收益 1
+
+4. **把旋转完的 K_new、V_new 追加写入 KV‑Cache 缓冲区**
+
+> 
+> KVcache 现在 = 全部历史 K/V + 刚刚这个新 K/V
+
+5. 读 KV‑Cache：取出全部历史 `K_cache[2,N,64]`，`V_cache[2,N,64]`
+
+> 
+> N = 当前已经存在的上下文长度，每轮 + 1
+
+6. GQA 注意力计算
+
+- Q `[14,1,64]`
+- K_cache `[2,N,64]`
+
+```
+scores = Q @ K_cache.T   → shape [14,1,N]
+scale（除以√64）
+👉 decode没有未来token，不用‑inf mask
+softmax
+out_heads = softmax_scores @ V_cache
+```
+
+> 
+> ⚠️这里 N 越来越大！N 每轮 + 1，**Q@Kᵀ 和 @V 的计算量、读内存量跟着 N 线性变大**。
+> 这就是：**每轮计算量不是固定，上下文越长越慢**。
+
+7. 多头拼接 → [1,896]（内存重组，无计算）
+8. attn_output.weight(Wo) GEMM：`[1,896] × [896,896]`
+👉这一步**计算量固定不变，跟上下文 N 无关**
+9. 残差 ADD →输出送下一层 RMSNorm
+```
