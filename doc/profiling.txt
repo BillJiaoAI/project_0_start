@@ -1,0 +1,10 @@
+nvcc -g -lineinfo -O3 -arch=sm_120 vectoradd_v1.cu -o vecadd_opt.exe
+nsys profile vecadd_opt.exe
+nsys-ui report1.nsys-rep
+
+
+
+ncu -o vec_kernel vecadd_opt.exe
+ncu-ui vec_kernel.ncu-rep
+
+nvcc -ptx -arch=sm_120 vecadd.cu -o vecadd.ptx

@@ -1,0 +1,21 @@
+==PROF== Connected to process 29932 (D:\software2_ln\project_0_start\matmul\optimized_v1\matmul_v1.exe)
+==PROF== Profiling "matmul_v1" - 0: 0%....50%....100% - 1 pass
+=== Matmul V1: Shared Memory Tiling ===
+Matrix: 1024x1024 x 1024x1024 = 1024x1024
+Block: 16x16, Grid: 64x64
+Tile Size: 16x16
+Time: 193.16 ms
+GFLOPS: 11.12
+Error: 7.440109
+Test PASSED
+==PROF== Disconnected from process 29932
+[29932] matmul_v1.exe@127.0.0.1
+  matmul_v1(const float *, const float *, float *, int, int, int) (64, 64, 1)x(16, 16, 1), Context 1, Stream 7, Device 0, CC 12.0
+    Section: Command line profiler metrics
+    ----------------------------------------------------------------------- ----------- ------------
+    Metric Name                                                             Metric Unit Metric Value
+    ----------------------------------------------------------------------- ----------- ------------
+    sm__shared_mem_conflicts_pipe_lsu_mem_shared_op_global.avg.pct                           (!) n/a
+    sm__shared_mem_transactions_conflicts_pipe_lsu_mem_shared_op_global.avg                  (!) n/a
+    ----------------------------------------------------------------------- ----------- ------------
+

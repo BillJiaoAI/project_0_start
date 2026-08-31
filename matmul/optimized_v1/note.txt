@@ -1,0 +1,40 @@
+一个block 负责一个蓝色的输出
+
+
+k0
+
+block里的所有线程，把俩蓝色的load上来
+
+sync
+
+compute -> tmp_sum
+
+sync 防止写坏share_mem
+
+k1
+load k1 tile
+sync
+compute
+sync
+
+k2
+load k2 tile
+sync
+...
+
+
+原本loadGlobal M*N*K
+目前loadGlobal M*N*(K/Tile_size)
+
+Tile_size = block内线程数
+
+
+
+
+
+
+
+推理出AIE
+M,K  K,N
+如果C32，那M的布局就是 1, K/32, M, 32; N: 1, N/32, K, 32
+M_loop N_loop K_loop类似于IC loop

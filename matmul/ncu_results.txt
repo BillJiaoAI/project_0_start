@@ -1,0 +1,16 @@
+==PROF== Connected to process 5684 (D:\software2_ln\project_0_start\matmul\optimized_v1\matmul_v1.exe)
+=== Matmul V1: Shared Memory Tiling ===
+Matrix: 1024x1024 x 1024x1024 = 1024x1024
+Block: 16x16, Grid: 64x64
+Tile Size: 16x16
+Time: 387.45 ms
+GFLOPS: 5.54
+Error: 7.440109
+Test PASSED
+==PROF== Disconnected from process 5684
+"ID","Process ID","Process Name","Host Name","Kernel Name","Context","Stream","Block Size","Grid Size","Device","CC","Section Name","Metric Name","Metric Unit","Metric Value"
+"0","5684","matmul_v1.exe","127.0.0.1","matmul_v1(const float *, const float *, float *, int, int, int)","1","7","(16, 16, 1)","(64, 64, 1)","0","12.0","Command line profiler metrics","sm__inst_executed.avg","inst","2,506,069.33"
+"0","5684","matmul_v1.exe","127.0.0.1","matmul_v1(const float *, const float *, float *, int, int, int)","1","7","(16, 16, 1)","(64, 64, 1)","0","12.0","Command line profiler metrics","sm__registers_per_thread.avg","","n/a"
+"0","5684","matmul_v1.exe","127.0.0.1","matmul_v1(const float *, const float *, float *, int, int, int)","1","7","(16, 16, 1)","(64, 64, 1)","0","12.0","Command line profiler metrics","sm__shared_mem_per_block.avg","","n/a"
+"0","5684","matmul_v1.exe","127.0.0.1","matmul_v1(const float *, const float *, float *, int, int, int)","1","7","(16, 16, 1)","(64, 64, 1)","0","12.0","Command line profiler metrics","sm__throughput.avg.pct_of_peak_sustained_elapsed","%","95.55"
+"0","5684","matmul_v1.exe","127.0.0.1","matmul_v1(const float *, const float *, float *, int, int, int)","1","7","(16, 16, 1)","(64, 64, 1)","0","12.0","Command line profiler metrics","sm__warps_active.avg.pct_of_peak_sustained_active","%","97.07"
